@@ -35,7 +35,8 @@ test/fixtures
 
 # Ignore environment variables
 /.env
-/.env.development.local
+/.env.*
+!/.env.example
 
 #---------------------------------------#
 # IDEs & Editors Ignores                #
