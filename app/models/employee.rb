@@ -1,5 +1,5 @@
 class Employee < ApplicationRecord
-  COUNTRY_CODES = %w[US GB DE FR IN DP AU CA SG BR MX ZA].freeze
+  COUNTRY_CODES = %w[US GB DE FR IN JP AU CA SG BR MX ZA].freeze
   CURRENCIES = %w[USD EUR GBP INR JPY AUD CAD SGD BRL MXN ZAR].freeze
   MAX_SALARY = BigDecimal("10000000000")
 
