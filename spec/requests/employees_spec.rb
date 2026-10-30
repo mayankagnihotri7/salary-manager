@@ -220,4 +220,81 @@ RSpec.describe "Employees API", type: :request do
       end
     end
   end
+
+  describe "PATCH /api/v1/employees/:id" do
+      let!(:employee) { create(:employee, salary: "1500000.00", currency: "INR", first_name: "Asha") }
+      let(:path) { "/api/v1/employees/#{employee.id}" }
+
+      def update_salary(salary, **extra)
+        patch path, params: { employee: { salary: salary, **extra } }, as: :json
+      end
+
+      it "rejects unauthenticated requests" do
+        update_salary("1600000")
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(employee.reload.salary).to eq(BigDecimal("1500000"))
+      end
+
+      it "forbids viewers" do
+        sign_in_as(create(:user))
+
+        update_salary("1600000")
+
+        expect(response).to have_http_status(:forbidden)
+        expect(employee.reload.salary).to eq(BigDecimal("1500000"))
+      end
+
+      context "when signed in as an admin" do
+        before { sign_in_as(create(:user, :admin)) }
+
+        it "overwrites the salary and returns the updated employee" do
+          update_salary("1600000.50")
+
+          expect(response).to have_http_status(:ok)
+          expect(response.parsed_body["employee"]).to include(
+            "id" => employee.id, "currency" => "INR", "salary" => "1600000.5",
+            "department" => { "id" => employee.department_id, "name" => employee.department.name }
+          )
+          expect(employee.reload.salary).to eq(BigDecimal("1600000.50"))
+        end
+
+        it "ignores attributes other than salary" do
+          update_salary("1600000", first_name: "Changed", currency: "USD")
+
+          expect(response).to have_http_status(:ok)
+          expect(employee.reload).to have_attributes(first_name: "Asha", currency: "INR")
+        end
+
+        {
+          "zero" => "0",
+          "negative" => "-5",
+          "above the maximum" => "10000000000.01",
+          "more than two decimals" => "100.005",
+          "non-numeric" => "abc",
+          "blank" => ""
+        }.each do |description, value|
+          it "rejects a #{description} salary and leaves the old value" do
+            update_salary(value)
+
+            expect(response).to have_http_status(422)
+            expect(response.parsed_body["errors"]).to have_key("salary")
+            expect(employee.reload.salary).to eq(BigDecimal("1500000"))
+          end
+        end
+
+        it "returns 400 when the employee parameter is missing" do
+          patch path, params: {}, as: :json
+
+          expect(response).to have_http_status(:bad_request)
+          expect(response.parsed_body["error"]).to be_present
+        end
+
+        it "returns 404 for an unknown employee" do
+          patch "/api/v1/employees/#{SecureRandom.uuid}", params: { employee: { salary: "1" } }, as: :json
+
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
 end

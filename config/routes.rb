@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resource :session, only: %i[show create destroy]
-      resources :employees, only: %i[index show]
+      resources :employees, only: %i[index show update]
     end
   end
 end
