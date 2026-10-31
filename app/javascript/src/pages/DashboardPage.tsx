@@ -1,13 +1,7 @@
 import { Link } from "react-router";
+import { StatisticsTable } from "../components/StatisticsTable";
 import { useDashboard } from "../hooks/useDashboard";
-import { formatCount, formatSalary } from "../lib/format";
-
-const AMOUNT_COLUMNS = [
-  ["min", "Min"],
-  ["median", "Median"],
-  ["avg", "Average"],
-  ["max", "Max"],
-] as const;
+import { formatCount } from "../lib/format";
 
 export const DashboardPage = () => {
   const { data, error, retry } = useDashboard();
@@ -60,61 +54,22 @@ export const DashboardPage = () => {
           </p>
         </div>
 
-        <div className='overflow-x-auto rounded-lg border border-slate-200 bg-white'>
-          <table className='min-w-full divide-y divide-slate-200 text-sm'>
-            <caption className='sr-only'>Salary statistics per currency</caption>
-            <thead className='bg-slate-50'>
-              <tr>
-                <th
-                  scope='col'
-                  className='px-3 py-2 text-left font-medium text-slate-600'
-                >
-                  Currency
-                </th>
-                <th
-                  scope='col'
-                  className='px-3 py-2 text-right font-medium text-slate-600'
-                >
-                  Employees
-                </th>
-                {AMOUNT_COLUMNS.map(([key, label]) => (
-                  <th
-                    key={key}
-                    scope='col'
-                    className='px-3 py-2 text-right font-medium text-slate-600'
-                  >
-                    {label}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className='divide-y divide-slate-100'>
-              {data.currencies.map((row) => (
-                <tr key={row.currency}>
-                  <th scope='row' className='px-3 py-2 text-left font-medium'>
-                    <Link
-                      to={`/employees?currency=${row.currency}`}
-                      className='text-slate-900 hover:underline'
-                    >
-                      {row.currency}
-                    </Link>
-                  </th>
-                  <td className='px-3 py-2 text-right tabular-nums'>
-                    {formatCount(row.headcount)}
-                  </td>
-                  {AMOUNT_COLUMNS.map(([key]) => (
-                    <td
-                      key={key}
-                      className='whitespace-nowrap px-3 py-2 text-right tabular-nums'
-                    >
-                      {formatSalary(row[key], row.currency)}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <StatisticsTable
+          caption='Salary statistics per currency'
+          labelHeader='Currency'
+          rows={data.currencies.map((row) => ({
+            ...row,
+            id: row.currency,
+            label: (
+              <Link
+                to={`/employees?currency=${row.currency}`}
+                className='text-slate-900 hover:underline'
+              >
+                {row.currency}
+              </Link>
+            ),
+          }))}
+        />
         <p className='text-xs text-slate-500'>
           Each row covers one currency; amounts are never combined across
           currencies.

@@ -25,6 +25,14 @@ export const AppShell = ({ user }: Props) => {
                 Dashboard
               </NavLink>
               <NavLink
+                to='/analytics'
+                className={({ isActive }) =>
+                  `text-sm ${isActive ? "font-semibold text-slate-900" : "text-slate-600 hover:text-slate-900"}`
+                }
+              >
+                Analytics
+              </NavLink>
+              <NavLink
                 to='/employees'
                 className={({ isActive }) =>
                   `text-sm ${isActive ? "font-semibold text-slate-900" : "text-slate-600 hover:text-slate-900"}`

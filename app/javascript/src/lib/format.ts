@@ -1,7 +1,12 @@
 const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
 
-export const countryName = (code: string): string =>
-  regionNames.of(code) ?? code;
+export const countryName = (code: string): string => {
+  try {
+    return regionNames.of(code) ?? code;
+  } catch {
+    return code;
+  }
+};
 
 // Currency codes rather than symbols: "$" alone is ambiguous (USD, AUD, CAD, SGD, MXN).
 // The API sends salary as a string; it is converted to a number for display only.
