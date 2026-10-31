@@ -44,6 +44,15 @@ RSpec.describe "Sessions", type: :request do
       post "/api/v1/session", params: { email_address: "admin@example.com" }, as: :json
       expect(response).to have_http_status(:unauthorized)
     end
+
+    it "returns 429 JSON once the rate limit is exceeded" do
+      allow(Api::V1::SessionsController.cache_store).to receive(:increment).and_return(11)
+
+      expect { sign_in_request }.not_to change(Session, :count)
+
+      expect(response).to have_http_status(:too_many_requests)
+      expect(response.parsed_body).to eq("error" => "Too many sign-in attempts")
+    end
   end
 
   describe "GET /api/v1/session" do

@@ -2,7 +2,8 @@ module Api
   module V1
     class SessionsController < BaseController
       allow_unauthenticated_access only: %i[ create ]
-      rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_session_path, alert: "Try again later." }
+      rate_limit to: 10, within: 3.minutes, only: :create,
+                 with: -> { render json: { error: "Too many sign-in attempts" }, status: :too_many_requests }
 
       def show
         render json: session_payload(Current.user)
