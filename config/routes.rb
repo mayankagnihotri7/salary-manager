@@ -15,6 +15,11 @@ Rails.application.routes.draw do
     namespace :v1 do
       resource :session, only: %i[show create destroy]
       resources :employees, only: %i[index show update]
+      resource :dashboard, only: :show
+      resource :analytics, only: :show
     end
   end
+
+  root "home#index"
+  get "*path", to: "home#index", constraints: ->(request) { request.format.html? && !request.path.start_with?("/api") }
 end
