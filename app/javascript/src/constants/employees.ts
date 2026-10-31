@@ -36,6 +36,12 @@ export const STATUS_LABELS: Record<EmployeeStatus, string> = {
   terminated: "Terminated",
 };
 
+export const STATUS_STYLES: Record<EmployeeStatus, string> = {
+  active: "bg-green-100 text-green-800",
+  on_leave: "bg-amber-100 text-amber-800",
+  terminated: "bg-slate-200 text-slate-700",
+};
+
 export const SORTS = [
   "employee_number",
   "name",

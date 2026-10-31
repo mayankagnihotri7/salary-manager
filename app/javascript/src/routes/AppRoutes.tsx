@@ -1,7 +1,8 @@
 import { Link, Navigate, Route, Routes } from "react-router";
 import { AppShell } from "../components/AppShell";
 import type { SessionUser } from "../types/session";
-import { EmployeesPage } from "../pages/EmployeePage";
+import { EmployeeDetailPage } from "../pages/EmployeeDetailPage";
+import { EmployeePage } from "../pages/EmployeePage";
 
 const NotFound = () => (
   <section className='py-10 text-center'>
@@ -24,7 +25,11 @@ export const AppRoutes = ({ user }: Props) => (
   <Routes>
     <Route element={<AppShell user={user} />}>
       <Route index element={<Navigate to='/employees' replace />} />
-      <Route path='employees' element={<EmployeesPage />} />
+      <Route path='employees' element={<EmployeePage />} />
+      <Route
+        path='employees/:id'
+        element={<EmployeeDetailPage user={user} />}
+      />
       <Route path='*' element={<NotFound />} />
     </Route>
   </Routes>

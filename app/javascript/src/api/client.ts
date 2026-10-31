@@ -30,13 +30,12 @@ export class ApiError extends Error {
   }
 }
 
-const serverMessage = (data: unknown): string | undefined =>
-  typeof data === "object" &&
-  data !== null &&
-  "error" in data &&
-  typeof data.error === "string"
-    ? data.error
-    : undefined;
+// Fixed client-side text per status; server-provided messages are never shown.
+const HTTP_MESSAGES: Record<number, string> = {
+  401: "Please sign in again.",
+  403: "You don't have permission to do that.",
+  404: "That record could not be found.",
+};
 
 const toApiError = (error: unknown): ApiError => {
   if (axios.isCancel(error)) {
@@ -51,7 +50,7 @@ const toApiError = (error: unknown): ApiError => {
     const { status, data } = error.response;
     return new ApiError(
       "http",
-      serverMessage(data) ?? `The request failed (HTTP ${status}).`,
+      HTTP_MESSAGES[status] ?? `The request failed (HTTP ${status}).`,
       { status, data },
     );
   }
