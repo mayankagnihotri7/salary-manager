@@ -44,6 +44,7 @@ were known.
 | Sign-in rate limit returned 500: the generator's HTML redirect was left in the JSON controller. | The agent, while verifying a claim for the docs; fixed with a 429 and a spec |
 | The API client showed server error text, contrary to the intended design. | The agent, reviewing the code before the detail page |
 | Notes I had written earlier claimed the rate limit was inactive and that `db:seed` worked; both were wrong. | Checking docs claims against the running code instead of trusting notes |
+| `bin/ci` had never been run and failed: style offenses, a gem with a published security advisory (rack), and an unreviewed Brakeman warning. It also did not run the specs. | The agent, during a code-quality review I asked for near the end; fixed, and RSpec, typecheck and lint added to `bin/ci` |
 
 ## What I took from it
 

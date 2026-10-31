@@ -76,6 +76,7 @@ bin/rails seed:demo_users           # only (re)create the demo users
 ## Tests and checks
 
 ```sh
+bin/ci               # everything below except the build, plus RuboCop, Brakeman and a gem audit
 bundle exec rspec    # backend: 112 examples, about 10 s
 npm run typecheck    # TypeScript, strict
 npm run lint         # ESLint

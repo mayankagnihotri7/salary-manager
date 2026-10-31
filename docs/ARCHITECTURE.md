@@ -108,9 +108,9 @@ erDiagram
 |---|---|
 | `api/` | One Axios client (CSRF header, 10 s timeout, errors normalised to `ApiError` with fixed messages) and one function per endpoint |
 | `contexts/`, `hooks/useSession` | Session state: loading / signed out / signed in / error |
-| `hooks/` | Data loading per page (`useEmployees`, `useEmployee`, `useDashboard`, `useAnalytics`, `useDepartments`) and URL state (`useEmployeeQuery`) |
+| `hooks/` | `useApiData` (shared loading: abort, errors, retry, 401 handling), thin per-page hooks on top of it (`useEmployees`, `useEmployee`, `useDashboard`, `useAnalytics`, `useDepartments`), and URL state (`useEmployeeQuery`) |
 | `pages/` | Directory, employee detail, dashboard, analytics |
-| `components/` | App shell, sign-in form, directory table / filters / pagination, salary editor, statistics table |
+| `components/` | App shell, sign-in form, directory table / filters / pagination, salary editor, statistics table, error alert |
 | `constants/`, `lib/`, `types/` | Filter option lists, formatting helpers, API types |
 
 - **The URL is the source of truth** for the directory (search, filters, sort, page) and
