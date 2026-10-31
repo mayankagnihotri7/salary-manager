@@ -2,6 +2,15 @@ import { NavLink, Outlet } from "react-router";
 import { useSession } from "../hooks/useSession";
 import type { SessionUser } from "../types/session";
 
+const NAV_LINKS = [
+  { to: "/dashboard", label: "Dashboard" },
+  { to: "/analytics", label: "Analytics" },
+  { to: "/employees", label: "Employees" },
+];
+
+const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+  `text-sm ${isActive ? "font-semibold text-slate-900" : "text-slate-600 hover:text-slate-900"}`;
+
 type Props = {
   user: SessionUser;
 };
@@ -16,30 +25,11 @@ export const AppShell = ({ user }: Props) => {
           <div className='flex items-center gap-6'>
             <h1 className='text-lg font-semibold'>Salary Manager</h1>
             <nav aria-label='Main' className='flex gap-4'>
-              <NavLink
-                to='/dashboard'
-                className={({ isActive }) =>
-                  `text-sm ${isActive ? "font-semibold text-slate-900" : "text-slate-600 hover:text-slate-900"}`
-                }
-              >
-                Dashboard
-              </NavLink>
-              <NavLink
-                to='/analytics'
-                className={({ isActive }) =>
-                  `text-sm ${isActive ? "font-semibold text-slate-900" : "text-slate-600 hover:text-slate-900"}`
-                }
-              >
-                Analytics
-              </NavLink>
-              <NavLink
-                to='/employees'
-                className={({ isActive }) =>
-                  `text-sm ${isActive ? "font-semibold text-slate-900" : "text-slate-600 hover:text-slate-900"}`
-                }
-              >
-                Employees
-              </NavLink>
+              {NAV_LINKS.map(({ to, label }) => (
+                <NavLink key={to} to={to} className={navLinkClass}>
+                  {label}
+                </NavLink>
+              ))}
             </nav>
           </div>
           <div className='flex items-center gap-4 text-sm'>

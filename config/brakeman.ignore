@@ -1,0 +1,28 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "88de4afb2710dab0bd5660b51c917769f610bbfa924803ebe4740d89c28998c9",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/employee.rb",
+      "line": 47,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(({ \"employee_number\" => ([\"employees.employee_number\"]), \"name\" => ([\"employees.last_name\", \"employees.first_name\"]), \"job_title\" => ([\"employees.job_title\"]), \"department\" => ([\"departments.name\"]), \"country_code\" => ([\"employees.country_code\"]), \"currency\" => ([\"employees.currency\"]), \"salary\" => ([\"employees.currency\", \"employees.salary\"]), \"hired_on\" => ([\"employees.hired_on\"]), \"status\" => ([\"employees.status\"]) }.fetch(sort.to_s, [\"employees.employee_number\"]).map do\n \"#{column} #{(\"DESC\" or \"ASC\")}\"\n end << \"employees.id ASC\").join(\", \"))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Employee",
+        "method": "Employee.sorted_by"
+      },
+      "user_input": "{ \"employee_number\" => ([\"employees.employee_number\"]), \"name\" => ([\"employees.last_name\", \"employees.first_name\"]), \"job_title\" => ([\"employees.job_title\"]), \"department\" => ([\"departments.name\"]), \"country_code\" => ([\"employees.country_code\"]), \"currency\" => ([\"employees.currency\"]), \"salary\" => ([\"employees.currency\", \"employees.salary\"]), \"hired_on\" => ([\"employees.hired_on\"]), \"status\" => ([\"employees.status\"]) }.fetch(sort.to_s, [\"employees.employee_number\"]).map do\n \"#{column} #{(\"DESC\" or \"ASC\")}\"\n end",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "False positive: ORDER BY columns come from the fixed Employee::SORTS hash (unknown keys fall back to employee_number) and the direction is always the literal ASC or DESC; no request text reaches the SQL."
+    }
+  ],
+  "brakeman_version": "8.1.0"
+}

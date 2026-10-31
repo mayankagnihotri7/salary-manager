@@ -1,3 +1,4 @@
+import { ErrorAlert } from "../components/ErrorAlert";
 import { EmployeeFilters } from "../components/employees/EmployeeFilters";
 import { EmployeeTable } from "../components/employees/EmployeeTable";
 import { Pagination } from "../components/employees/Pagination";
@@ -93,19 +94,10 @@ export const EmployeePage = () => {
       />
 
       {error && (
-        <div
-          role='alert'
-          className='rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800'
-        >
-          <p>{data ? `${error} Showing the previous results.` : error}</p>
-          <button
-            type='button'
-            onClick={retry}
-            className='mt-2 rounded border border-red-300 bg-white px-3 py-1 hover:bg-red-100'
-          >
-            Try again
-          </button>
-        </div>
+        <ErrorAlert
+          message={data ? `${error} Showing the previous results.` : error}
+          onRetry={retry}
+        />
       )}
 
       {!data && !error && (

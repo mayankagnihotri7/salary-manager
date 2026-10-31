@@ -1,4 +1,5 @@
 import { useSearchParams } from "react-router";
+import { ErrorAlert } from "../components/ErrorAlert";
 import { StatisticsTable } from "../components/StatisticsTable";
 import { useAnalytics } from "../hooks/useAnalytics";
 import { countryName, formatCount } from "../lib/format";
@@ -116,19 +117,7 @@ export const AnalyticsPage = () => {
       </div>
 
       {error && (
-        <div
-          role='alert'
-          className='rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800'
-        >
-          <p>{error}</p>
-          <button
-            type='button'
-            onClick={retry}
-            className='mt-2 rounded border border-red-300 bg-white px-3 py-1 hover:bg-red-100'
-          >
-            Try again
-          </button>
-        </div>
+        <ErrorAlert message={error} onRetry={retry} />
       )}
 
       {!data && !error && (
