@@ -15,7 +15,15 @@ export const AppShell = ({ user }: Props) => {
         <div className='mx-auto flex max-w-7xl items-center justify-between px-4 py-3'>
           <div className='flex items-center gap-6'>
             <h1 className='text-lg font-semibold'>Salary Manager</h1>
-            <nav aria-label='Main'>
+            <nav aria-label='Main' className='flex gap-4'>
+              <NavLink
+                to='/dashboard'
+                className={({ isActive }) =>
+                  `text-sm ${isActive ? "font-semibold text-slate-900" : "text-slate-600 hover:text-slate-900"}`
+                }
+              >
+                Dashboard
+              </NavLink>
               <NavLink
                 to='/employees'
                 className={({ isActive }) =>

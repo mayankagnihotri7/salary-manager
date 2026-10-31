@@ -1,6 +1,7 @@
 import { Link, Navigate, Route, Routes } from "react-router";
 import { AppShell } from "../components/AppShell";
 import type { SessionUser } from "../types/session";
+import { DashboardPage } from "../pages/DashboardPage";
 import { EmployeeDetailPage } from "../pages/EmployeeDetailPage";
 import { EmployeePage } from "../pages/EmployeePage";
 
@@ -25,6 +26,7 @@ export const AppRoutes = ({ user }: Props) => (
   <Routes>
     <Route element={<AppShell user={user} />}>
       <Route index element={<Navigate to='/employees' replace />} />
+      <Route path='dashboard' element={<DashboardPage />} />
       <Route path='employees' element={<EmployeePage />} />
       <Route
         path='employees/:id'
