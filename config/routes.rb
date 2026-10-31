@@ -17,9 +17,10 @@ Rails.application.routes.draw do
       resources :employees, only: %i[index show update]
       resource :dashboard, only: :show
       resource :analytics, only: :show
+      resources :departments, only: :index
     end
   end
 
   root "home#index"
-  get "*path", to: "home#index", constraints: ->(request) { request.format.html? && !request.path.start_with?("/api") }
+  get "*path", to: "home#index", constraints: ->(request) { request.format.html? && !request.path.match?(%r{\A/api(/|\z)}) }
 end

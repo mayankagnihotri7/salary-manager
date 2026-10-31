@@ -1,3 +1,4 @@
+import { NavLink, Outlet } from "react-router";
 import { useSession } from "../hooks/useSession";
 import type { SessionUser } from "../types/session";
 
@@ -11,8 +12,20 @@ export const AppShell = ({ user }: Props) => {
   return (
     <div className='min-h-screen bg-slate-50 text-slate-900'>
       <header className='border-b border-slate-200 bg-white'>
-        <div className='mx-auto flex max-w-5xl items-center justify-between px-4 py-3'>
-          <h1 className='text-lg font-semibold'>Salary Manager</h1>
+        <div className='mx-auto flex max-w-7xl items-center justify-between px-4 py-3'>
+          <div className='flex items-center gap-6'>
+            <h1 className='text-lg font-semibold'>Salary Manager</h1>
+            <nav aria-label='Main'>
+              <NavLink
+                to='/employees'
+                className={({ isActive }) =>
+                  `text-sm ${isActive ? "font-semibold text-slate-900" : "text-slate-600 hover:text-slate-900"}`
+                }
+              >
+                Employees
+              </NavLink>
+            </nav>
+          </div>
           <div className='flex items-center gap-4 text-sm'>
             <span>
               {user.email_address}{" "}
@@ -34,8 +47,8 @@ export const AppShell = ({ user }: Props) => {
         </div>
       </header>
 
-      <main className='mx-auto max-w-5xl px-4 py-8'>
-        <p className='text-slate-600'>Employees coming next.</p>
+      <main className='mx-auto max-w-7xl px-4 py-8'>
+        <Outlet />
       </main>
     </div>
   );

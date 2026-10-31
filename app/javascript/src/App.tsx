@@ -1,8 +1,10 @@
-import { AppShell } from "./components/AppShell";
+import { BrowserRouter } from "react-router";
+import { Toaster } from "sonner";
 import { SessionError } from "./components/SessionError";
 import { SignInForm } from "./components/SignInForm";
 import { SessionProvider } from "./contexts/SessionProvider";
 import { useSession } from "./hooks/useSession";
+import { AppRoutes } from "./routes/AppRoutes";
 
 const SessionGate = () => {
   const { session, retry } = useSession();
@@ -22,14 +24,25 @@ const SessionGate = () => {
     case "error":
       return <SessionError message={session.message} onRetry={retry} />;
     case "signedOut":
-      return <SignInForm />;
+      return <SignInForm notice={session.notice} />;
     case "signedIn":
-      return <AppShell user={session.user} />;
+      return <AppRoutes user={session.user} />;
   }
 };
 
 export const App = () => (
-  <SessionProvider>
-    <SessionGate />
-  </SessionProvider>
+  <>
+    <Toaster
+      position='bottom-center'
+      duration={5000}
+      visibleToasts={3}
+      closeButton
+      richColors
+    />
+    <BrowserRouter>
+      <SessionProvider>
+        <SessionGate />
+      </SessionProvider>
+    </BrowserRouter>
+  </>
 );

@@ -56,7 +56,7 @@ const toApiError = (error: unknown): ApiError => {
     );
   }
 
-  if (error.code === "ECONNABORTED" || error.code === "ETIMEOUT") {
+  if (error.code === "ECONNABORTED" || error.code === "ETIMEDOUT") {
     return new ApiError(
       "timeout",
       "The server took too long to respond. Please try again.",
@@ -65,7 +65,7 @@ const toApiError = (error: unknown): ApiError => {
 
   return new ApiError(
     "network",
-    "Can't reach the server. Check you connection and try again.",
+    "Can't reach the server. Check your connection and try again.",
   );
 };
 
@@ -79,7 +79,7 @@ export const client = axios.create({
 client.interceptors.request.use((config) => {
   if ((config.method ?? "get").toLowerCase() !== "get") {
     const token = document.querySelector<HTMLMetaElement>(
-      'meta[name="csrf-token"',
+      'meta[name="csrf-token"]',
     )?.content;
 
     if (token) {

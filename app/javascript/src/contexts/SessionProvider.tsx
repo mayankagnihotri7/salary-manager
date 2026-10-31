@@ -6,6 +6,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { toast } from "sonner";
 import { ApiError } from "../api/client";
 import { createSession, destroySession, fetchSession } from "../api/session";
 import {
@@ -27,8 +28,11 @@ export const SessionProvider = ({ children }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const isMounted = useRef(true);
+  // Id of the sign-in/sign-out in flight, or null. Only that operation may release it, so a
+  // stale operation can never clear a newer operation's claim.
   const activeSubmission = useRef<number | null>(null);
   const latestOperation = useRef(0);
+  const sessionStatus = useRef<SessionState["status"]>("loading");
 
   const beginOperation = useCallback(() => {
     latestOperation.current += 1;
@@ -47,6 +51,10 @@ export const SessionProvider = ({ children }: Props) => {
       isMounted.current = false;
     };
   }, []);
+
+  useEffect(() => {
+    sessionStatus.current = session.status;
+  }, [session.status]);
 
   useEffect(() => {
     const operationId = beginOperation();
@@ -102,6 +110,7 @@ export const SessionProvider = ({ children }: Props) => {
         const user = await createSession(emailAddress, password);
         if (isCurrent(operationId)) {
           setSession({ status: "signedIn", user });
+          toast.success("Signed in successfully.");
         }
       } finally {
         // Only the operation that holds the claim releases it.
@@ -143,13 +152,29 @@ export const SessionProvider = ({ children }: Props) => {
       }
       if (isCurrent(operationId)) {
         setSession({ status: "signedOut", notice });
+        // Only a confirmed sign-out gets a success toast; otherwise the sign-in screen shows the notice.
+        if (!notice) {
+          toast.success("Signed out.");
+        }
       }
     }
   }, [beginOperation, isCurrent]);
 
+  const expire = useCallback(() => {
+    if (
+      sessionStatus.current !== "signedIn" ||
+      activeSubmission.current !== null
+    )
+      return;
+    sessionStatus.current = "signedOut";
+    beginOperation();
+    setSession({ status: "signedOut" });
+    toast.info("Your session expired. Please sign in again.");
+  }, [beginOperation]);
+
   const value = useMemo<SessionContextValue>(
-    () => ({ session, isSubmitting, signIn, signOut, retry }),
-    [session, isSubmitting, signIn, signOut, retry],
+    () => ({ session, isSubmitting, signIn, signOut, retry, expire }),
+    [session, isSubmitting, signIn, signOut, retry, expire],
   );
 
   return (

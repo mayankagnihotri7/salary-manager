@@ -13,6 +13,7 @@ export type SessionContextValue = {
   signIn: (emailAddress: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   retry: () => void;
+  expire: () => void;
 };
 
 export const SessionContext = createContext<SessionContextValue | null>(null);
