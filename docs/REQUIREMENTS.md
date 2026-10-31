@@ -22,7 +22,7 @@ Employees do not log in.
 
 ## Currency rules
 - `country_code` and `currency` are independent attributes. A currency need not
-  be the country's local currency (remote contractors, expatriates, regional pay).
+  be the country's local currency (remote contractors, people posted abroad, regional pay).
 - Currency must be a supported ISO 4217 code.
 - Salary amounts in different currencies are **never** summed, averaged, or
   compared. Every aggregate is grouped by currency. No FX conversion in v1.
@@ -47,7 +47,7 @@ create/edit/deactivate (employees are loaded only by the seed script),
 automated frontend tests.
 
 ## Assumptions
-- Data is synthetic. Salary is monthly gross in the stated currency.
+- Data is synthetic. Salary is annual gross in the stated currency.
 - Employees exist only via the deterministic seed script. The UI covers listing,
   filtering, detail view, and salary editing.
 - Search starts as plain case-insensitive substring matching; indexing is added
