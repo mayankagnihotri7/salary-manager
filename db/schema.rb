@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_29_170737) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_31_174051) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pg_trgm"
 
   create_table "departments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
@@ -39,8 +40,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_29_170737) do
     t.index ["currency"], name: "index_employees_on_currency"
     t.index ["department_id"], name: "index_employees_on_department_id"
     t.index ["email"], name: "index_employees_on_email", unique: true
+    t.index ["email"], name: "index_employees_on_email_trigram", opclass: :gin_trgm_ops, using: :gin
     t.index ["employee_number"], name: "index_employees_on_employee_number", unique: true
+    t.index ["employee_number"], name: "index_employees_on_employee_number_trigram", opclass: :gin_trgm_ops, using: :gin
+    t.index ["first_name"], name: "index_employees_on_first_name_trigram", opclass: :gin_trgm_ops, using: :gin
     t.index ["last_name", "first_name"], name: "index_employees_on_last_name_and_first_name"
+    t.index ["last_name"], name: "index_employees_on_last_name_trigram", opclass: :gin_trgm_ops, using: :gin
     t.index ["status"], name: "index_employees_on_status"
     t.check_constraint "salary > 0::numeric", name: "employees_salary_positive"
   end
