@@ -12,7 +12,7 @@ AI tools were used for discussing design, drafting code and specs. In the first 
 ## How I worked with it
 
 **Instructions file.** The agent worked from a standing instructions file that I wrote and
-kept up to date: stack and layout, verified API behaviour, and conventions (strong params
+kept up to date ([CLAUDE.md](../CLAUDE.md)): stack and layout, verified API behaviour, and conventions (strong params
 style, no new abstractions or libraries without a concrete need, RSpec only, correctness
 before simplicity). It also listed the remaining steps in order, each to be reviewed on its
 own.
